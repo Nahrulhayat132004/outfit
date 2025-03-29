@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Belanja</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Keranjang Belanja</h1>
+        <ul id="cart-items" class="list-group mt-3"></ul>
+
+        <!-- Tombol Checkout untuk Semua Barang -->
+        <button id="checkout-all-btn" class="btn btn-primary mt-4" style="display: none;">Checkout Semua Barang</button>
+    </div>
+
+    <script>
+        // Fungsi untuk menampilkan isi keranjang
+        function displayCart() {
+            const cartItems = document.getElementById('cart-items');
+            const checkoutAllBtn = document.getElementById('checkout-all-btn');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Kosongkan daftar sebelum ditampilkan ulang
+            cartItems.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<li class="list-group-item">Keranjang masih kosong.</li>';
+                checkoutAllBtn.style.display = 'none';  // Sembunyikan tombol checkout jika keranjang kosong
+            } else {
+                cart.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `
+                        ${item.quantity}x ${item.name} - $${item.price.toFixed(2)}
+                        <button class="btn btn-danger btn-sm" onclick="removeFromCart(${index})">Hapus</button>
+                        <button class="btn btn-success btn-sm" onclick="checkoutItem(${index})">Checkout</button>
+                    `;
+                    cartItems.appendChild(li);
+                });
+
+                // Tampilkan tombol checkout untuk semua barang
+                checkoutAllBtn.style.display = 'inline-block';
+            }
+        }
+
+        // Fungsi untuk menghapus barang dari keranjang
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Hapus barang berdasarkan index
+            cart.splice(index, 1);
+
+            // Simpan kembali ke Local Storage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Perbarui tampilan keranjang
+            displayCart();
+        }
+
+        // Fungsi untuk checkout item yang dipilih
+        function checkoutItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemToCheckout = cart[index];
+
+            // Simpan item yang dipilih untuk checkout ke localStorage (gunakan sessionStorage jika ingin)
+            sessionStorage.setItem('checkoutItem', JSON.stringify(itemToCheckout));
+
+            // Redirect ke halaman checkout
+            window.location.href = 'checkout1.html';
+        }
+
+        // Fungsi untuk checkout semua barang
+        document.getElementById('checkout-all-btn').addEventListener('click', function () {
+            // Simpan semua barang ke sessionStorage
+            sessionStorage.setItem('checkoutAllItems', JSON.stringify(JSON.parse(localStorage.getItem('cart'))));
+
+        });
+
+        // Tampilkan isi keranjang saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', displayCart);
+    </script>
+</body>
+</html>

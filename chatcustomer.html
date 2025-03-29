@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg mt-4">
+        <div class="flex items-center p-4 border-b">
+            <i class="fas fa-arrow-left text-xl text-gray-600"></i>
+            <div class="flex-grow text-center">
+                <h1 class="text-lg font-bold">Admin</h1>
+                <p class="text-sm text-gray-500">Online</p>
+            </div>
+            <i class="fas fa-ellipsis-v text-xl text-gray-600"></i>
+        </div>
+        <div class="p-4 h-96 overflow-y-auto" id="chatBox"></div>
+        <div class="flex items-center p-4 border-t">
+            <i class="fas fa-plus-circle text-2xl text-gray-600 mr-2"></i>
+            <input type="text" id="messageInput" placeholder="Tulis Pesan..." class="flex-grow p-2 border rounded-lg">
+            <i class="fas fa-smile text-2xl text-gray-600 mx-2"></i>
+            <button onclick="sendMessage()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Kirim</button>
+        </div>
+    </div>
+
+    <script>
+        let socket = new WebSocket("ws://localhost:8080");
+let username = "Customer"; // Identitas customer
+
+socket.onopen = () => {
+    console.log("✅ Terhubung ke WebSocket sebagai Customer");
+};
+
+socket.onmessage = (event) => {
+    let data = JSON.parse(event.data);
+    let chatBox = document.getElementById("chatBox");
+    let newMessage = document.createElement("div");
+
+    if (data.username === username) {
+        newMessage.className = "p-2 my-1 bg-green-100 rounded text-gray-800 text-right";
+        newMessage.textContent = `${data.text}`;
+    } else {
+        newMessage.className = "p-2 my-1 bg-blue-100 rounded text-gray-800";
+        newMessage.textContent = `${data.username}: ${data.text}`;
+    }
+
+    chatBox.appendChild(newMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+};
+
+function sendMessage() {
+    let input = document.getElementById("messageInput");
+    let text = input.value.trim();
+
+    if (text !== "") {
+        let messageObj = { username: username, text: text };
+        socket.send(JSON.stringify(messageObj));
+
+        let chatBox = document.getElementById("chatBox");
+        let newMessage = document.createElement("div");
+        newMessage.className = "p-2 my-1 bg-green-100 rounded text-gray-800 text-right";
+        newMessage.textContent = `${text}`;
+
+        chatBox.appendChild(newMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        input.value = "";
+    }
+}
+
+
+    </script>
+</body>
+</html>
