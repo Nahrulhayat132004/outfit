@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Shop Item - Start Bootstrap Template</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="styles.css" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- Product section -->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6">
+                    <img class="card-img-top mb-5 mb-md-0" src="2.jpeg" alt="..." />
+                </div>
+                <div class="col-md-6">
+                    <div class="small mb-1"></div>
+                    <h1 class="display-5 fw-bolder">Parfume fitsay Limited edition 30 ml</h1>
+                    <div class="fs-5 mb-5">
+                        <!-- Harga -->
+                        <!-- <span class="text-decoration-line-through">35.000</span> -->
+                        <span>35.000</span>
+                    </div>
+
+                    <!-- Form Pembelian -->
+                    <form action="database.php" method="POST">
+                        <!-- Nama Lengkap -->
+                        <div class="form-group mb-3">
+                            <label for="name">Nama Lengkap</label>
+                            <input class="form-control" type="text" id="name" name="name" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group mb-3">
+                            <label for="email">Email</label>
+                            <input class="form-control" type="email" id="email" name="email" required>
+                        </div>
+
+                        <!-- Nomor Telepon -->
+                        <div class="form-group mb-3">
+                            <label for="phone_number">Nomor Telepon</label>
+                            <input class="form-control" type="text" id="phone_number" name="phone_number" required>
+                        </div>
+
+                        <!-- Alamat Lengkap -->
+                        <div class="form-group mb-3">
+                            <label for="address">Alamat Lengkap</label>
+                            <input class="form-control" type="text" id="address" name="address" required>
+                        </div>
+
+                        <!-- Kota -->
+                        <div class="form-group mb-3">
+                            <label for="city">Kota</label>
+                            <input class="form-control" type="text" id="city" name="city" required>
+                        </div>
+
+                        <!-- Kode Pos -->
+                        <div class="form-group mb-3">
+                            <label for="postal_code">Kode Pos</label>
+                            <input class="form-control" type="text" id="postal_code" name="postal_code" required>
+                        </div>
+
+                        <!-- Jenis Barang -->
+                        <div class="form-group mb-3">
+                            <label for="item_type">Jenis Barang</label>
+                            <select class="form-control" id="item_type" name="item_type" required>
+                                <option value="" disabled selected>Pilih Jenis Barang</option>
+                                <option value="Selena Gomes">celana jeans skena</option>
+                            </select>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="form-group mb-3">
+                            <label for="quantity">Jumlah</label>
+                            <input class="form-control text-center" id="quantity" name="quantity" type="number" value="1" style="max-width: 3rem" required />
+                        </div>
+                        <!-- Tombol Checkout -->
+                        <button type="submit" class="btn btn-primary">Checkout</button>
+                        
+                    </form>
+                    <!-- tombol keranjang -->
+                    
+                       <!-- Tombol Keranjang -->
+<button type="button" id="add-to-cart-btn" class="btn btn-success" style="margin-top: 15px; margin-bottom: 25px;">
+    <i class="fas fa-shopping-cart"></i> Tambahkan ke Keranjang
+</button>
+
+<script>
+    // Tangkap tombol tambah ke keranjang
+    document.getElementById('add-to-cart-btn').addEventListener('click', function () {
+        // Ambil data barang dari elemen halaman
+        const productName = "Parfume fitsay limited edition 30 ml";
+        const productPrice = 35.000
+        const productQuantity = parseInt(document.getElementById('quantity').value);
+
+        // Ambil keranjang dari Local Storage atau buat array kosong jika belum ada
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Buat objek produk
+        const product = {
+            name: productName,
+            price: productPrice,
+            quantity: productQuantity
+        };
+
+        // Tambahkan produk ke dalam keranjang
+        cart.push(product);
+
+        // Simpan kembali ke Local Storage
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Notifikasi sukses
+        alert(`${productQuantity}x ${productName} berhasil ditambahkan ke keranjang!`);
+    });
+</script>
+
+
+
+                        
+                   
+                    <p class="lead mt-4">celana jeans skena kekinian membuat outfit anda semakin kece</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
